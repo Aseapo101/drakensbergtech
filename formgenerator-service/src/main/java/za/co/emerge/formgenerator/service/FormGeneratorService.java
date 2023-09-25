@@ -1,8 +1,9 @@
 package za.co.emerge.formgenerator.service;
 
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-@Service
-public class FormGeneratorService {
+public interface FormGeneratorService 
+{
 
+	void process(MultipartFile file);
 }
