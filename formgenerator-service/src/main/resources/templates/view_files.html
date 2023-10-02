@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+	<head>
+		<!--<meta charset="utf-8"/>-->
+		<meta charset="ISO-8859-1">
+		<title>View and Download Customer PDF Files</title>
+	</head>
+	<body class="container">
+		<div align="center">
+			<h1>View and Download Customer PDF Files</h1>
+			<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+	 		<p th:text="${message}"></p>
+	 		<div th:if="${showfiles_flag1} == true" th:text="dfsdfsdfsdfsdfsd" th:class="${'alert ' + alertClass}"></div>
+	 		<form action="#" th:action="@{/viewfiles}" method="get"> 
+	 			<button type="submit">View PDF Files</button>
+	 			<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+				<div th:if="${showfiles_flag} == true">
+				<table>
+					<thead>
+						<tr>
+							<th align="justify">File Name</th>
+							<th/>
+							<th align="justify">File Download Link</th>
+						</tr>
+					</thead>
+					
+					<tbody>
+						<tr th:each="file : ${files}">
+							<td  th:text="${file.fileName}"></td>
+							<td/>
+							<td align="right"><a  href="view_files.html" th:href="${file.downloadUri}" class="btn btn-primary">download file</a></td>
+						</tr>
+					</tbody>
+				</table>
+				</div>
+			</form>
+			<div th:if="${showfiles_flag} == true">
+			<hr style="height:2px;border-width:0;color:gray;background-color:gray">
+				<a href="/"> 
+         				<button type="button">Back to PDF Generation</button> 
+    				</a>
+			</div>
+		</div>
+	</body>
+</html>
+

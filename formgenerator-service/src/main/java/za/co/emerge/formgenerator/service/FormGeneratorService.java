@@ -1,9 +1,10 @@
 package za.co.emerge.formgenerator.service;
 
-import org.springframework.web.multipart.MultipartFile;
-
+/**
+ * @author FRANS MEHLAPE (ASEAPO101)
+ *
+ */
 public interface FormGeneratorService 
 {
-
-	void process(MultipartFile file);
+	void process(java.io.InputStream fileInputStream) throws RuntimeException;
 }

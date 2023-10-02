@@ -1,19 +1,24 @@
 package za.co.emerge.formgenerator.pojo;
 
+/**
+ * @author FRANS MEHLAPE (ASEAPO101)
+ * IntelligentReportingCustomerDetails - The class maps the columns of the CSV files. Names variables corresponds to the CSV file column headers.
+ */
 public class IntelligentReportingCustomerDetails 
 {
 
+	
 	private String clientName;
 	private String companyName;
 	private String numberOfActiveAcc;
 	private String accBeneficiary;
 	
-	public IntelligentReportingCustomerDetails(String... params) {
+	public IntelligentReportingCustomerDetails(String clientName,String companyName,String numberOfActiveAcc,String accBeneficiary) {
 		
-		this.clientName = params[0];
-		this.companyName = params[1];
-		this.numberOfActiveAcc = params[2];
-		this.accBeneficiary = params[3];
+		this.clientName = clientName;
+		this.companyName = companyName;
+		this.numberOfActiveAcc = numberOfActiveAcc;
+		this.accBeneficiary = accBeneficiary;
 		
 	}
 
@@ -48,6 +53,4 @@ public class IntelligentReportingCustomerDetails
 	public void setAccBeneficiary(String accBeneficiary) {
 		this.accBeneficiary = accBeneficiary;
 	}
-	
-	
 }
