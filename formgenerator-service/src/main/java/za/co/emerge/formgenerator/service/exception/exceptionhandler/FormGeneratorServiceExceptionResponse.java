@@ -2,6 +2,10 @@ package za.co.emerge.formgenerator.service.exception.exceptionhandler;
 
 import org.springframework.http.HttpStatus;
 
+/**
+ * @author FRANS MEHLAPE (ASEAPO101)
+ * FormGeneratorServiceExceptionResponse - Sanitized message sent to client system in case of an Exception occurrence.
+ */
 public class FormGeneratorServiceExceptionResponse {
 	
 	private String message;

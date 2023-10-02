@@ -2,6 +2,10 @@ package za.co.emerge.formgenerator.audit.pojo;
 
 import java.sql.Timestamp;
 
+/**
+ * @author @author FRANS MEHLAPE (ASEAPO101)
+ *
+ */
 public class UserActivity 
 {
 

@@ -1,4 +1,4 @@
-package za.co.emerge.formgenerator.utiltest;
+package za.co.emerge.formgenerator.util.test;
 
 public class FormGeneratorHelperTest {
 

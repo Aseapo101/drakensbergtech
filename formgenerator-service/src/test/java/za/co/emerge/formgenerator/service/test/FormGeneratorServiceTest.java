@@ -1,4 +1,4 @@
-package za.co.emerge.formgenerator.service;
+package za.co.emerge.formgenerator.service.test;
 
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;

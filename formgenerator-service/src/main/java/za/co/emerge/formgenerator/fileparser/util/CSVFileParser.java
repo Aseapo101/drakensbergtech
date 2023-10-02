@@ -9,73 +9,78 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVParser;
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.csv.CSVRecord;
-import org.apache.commons.csv.QuoteMode;
-import org.apache.commons.logging.LogFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import za.co.emerge.formgenerator.common.FormGeneratorConstants;
 import za.co.emerge.formgenerator.pojo.IntelligentReportingCustomerDetails;
+import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceException;
 
+/**
+ * @author FRANS MEHLAPE (ASEAPO101)
+ *
+ *CSVFileParser - The class parses a CSV file using Apache commons-csv implementation.
+ */
 public class CSVFileParser 
 
 {
-	
 	private static Logger log = LoggerFactory.getLogger(CSVFileParser.class);
 	
-	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream is) 
+	/**
+	 * @paraminputStream - CSV file parameter inputstream.
+	 * @return List<IntelligentReportingCustomerDetails> - A list of records/lines as per in the CSV file mapped according to
+	 * header columns of the CSV file.
+	 */
+	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream) 
 	{
 		InputStreamReader inputStreamReader = null;
-    	
     	BufferedReader fileReader = null;
     	
-        CSVParser csvParser = null;
-    	
-	    try {
+    	try {
 	    
-	    	inputStreamReader = new InputStreamReader(is);
+	    		inputStreamReader = new InputStreamReader(inputStream);
+	    		fileReader = new BufferedReader(inputStreamReader);
 	    	
-	    	fileReader = new BufferedReader(inputStreamReader);
-	    	
-	        csvParser = new CSVParser(fileReader, CSVFormat.DEFAULT.withFirstRecordAsHeader().withIgnoreHeaderCase().withTrim()); 
-	    	List<IntelligentReportingCustomerDetails> developerTutorialList = new ArrayList<>();
-	    	Iterable<CSVRecord> csvRecords = csvParser.getRecords();
-
-	    	
-	      for (CSVRecord csvRecord : csvRecords) {
-	    	  IntelligentReportingCustomerDetails customerDetails = new IntelligentReportingCustomerDetails(
-	              csvRecord.get("Client Name"),
-	              csvRecord.get("Company Name"),
-	              csvRecord.get("Number of Active Bank accounts"),
-	              csvRecord.get("Account Beneficiary")
-	            );
-
-	    	  developerTutorialList.add(customerDetails);
-	      }
-
-	      return developerTutorialList;
+	    		List<IntelligentReportingCustomerDetails> developerTutorialList = new ArrayList<>();
+	    		
+	    		CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+		    	        .setHeader(FormGeneratorConstants.CSV_FILE_COLUMN_HEADERS )
+		    	        .setSkipHeaderRecord(true)
+		    	        .build();
+		    	
+		    	Iterable<CSVRecord> csvRecords = csvFormat.parse(fileReader);
+		    	
+		    	csvRecords.forEach(csvRecord -> 
+		    	{
+		    		IntelligentReportingCustomerDetails customerDetails = new IntelligentReportingCustomerDetails
+		    				(
+		    				csvRecord.get("Client Name"),
+		    				csvRecord.get("Company Name"),
+		    				csvRecord.get("Number of Active Bank accounts"),
+		    				csvRecord.get("Account Beneficiary")
+		    				);
+	
+		    	  developerTutorialList.add(customerDetails);
+		    	});
+		    	
+	    	return developerTutorialList;
 	    }
 	    catch (IOException e) 
 	    {
-	      throw new RuntimeException("fail to parse CSV file: " + e.getMessage());
+	      throw new RuntimeException("Failed to parse CSV file: " + e.getMessage());
 	    }
-	    finally {
-	    	
-	    	closeResource(csvParser,fileReader,inputStreamReader);
-	    	log.info(" ###############System resources closed in the CSVparser############ ");
+	    finally 
+	    {
+	    	closeResource(fileReader,inputStreamReader);
 	    }
 	  }
 	
-	//Implement Try with resources statement in the above try block
-	private static void closeResource(CSVParser parser, BufferedReader bufferedReader, InputStreamReader inputStreamreader ) 
+	//TODO:Implement Try with resources statement in the above try block
+	private static void closeResource(BufferedReader bufferedReader, InputStreamReader inputStreamreader ) 
 	{
 		try
 		{
-			if(parser != null) 
-				parser.close();
-			
 			if(bufferedReader != null) 
 				bufferedReader.close();
 
@@ -86,7 +91,7 @@ public class CSVFileParser
 		catch (IOException e) 
 		{
 			log.error(" Error while closing system resources in the CSVparser : ",e);
+			throw new FormGeneratorServiceException("Exception occurred while closing system resources when parsing the CSV file");
 		}
 	}
-	
 }
