@@ -6,6 +6,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import za.co.emerge.formgenerator.persistence.PDFformBuilderRepository;
@@ -28,10 +29,11 @@ public class GeneratePdfFilesServiceImpl implements GeneratePdfFilesService
 	public Set<PDFform> getHistoricalPdfFiles() throws RuntimeException
 	{
 		Set<PDFform> pdfFileIds = new HashSet<PDFform>();
-			pdfFormBuilderRepository.findAll().stream().forEach(pdfFormEntityObject -> pdfFileIds.add(pdfFormEntityObject));
-			
-			log.info("Historical PDF files retrieved from the Database");
-			return pdfFileIds;
+		
+		pdfFormBuilderRepository.findAll(Sort.by("localDateTime").descending()).stream().forEach(pdfFormEntityObject -> pdfFileIds.add(pdfFormEntityObject));
+		log.info("Historical PDF files retrieved from the Database");
+		
+		return pdfFileIds;
 	}
 
 	@Override

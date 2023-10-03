@@ -5,6 +5,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
+import java.security.cert.CollectionCertStoreParameters;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -83,6 +85,7 @@ public class FormGeneratorController
 	 * @param model - Spring UI org.springframework.ui.Model object
 	 * @return ModelAndView - location of the view page and values to render in the browser.
 	 */
+	@SuppressWarnings("unchecked")
 	@GetMapping("/viewfiles")
 	public ModelAndView getGeneratedPdfFileList(ModelMap model) 
 	{
@@ -106,10 +109,11 @@ public class FormGeneratorController
 			          .path(String.valueOf(pdfFormEntity.getId()))
 			          .toUriString();
 						
-					return new GeneratedPdfFormFile(pdfFormEntity.getDocumentName(),fileDownloadUri,pdfFormEntity.getDocument().length,"application/pdf");
+					return new GeneratedPdfFormFile(pdfFormEntity.getDocumentName(),fileDownloadUri,pdfFormEntity.getDocument().length,"application/pdf",pdfFormEntity.getLocalDateTime());
 						
 			    	}).collect(Collectors.toList());
-		
+				
+				Collections.sort(fileDownloadUris);
 				model.addAttribute("showfiles_flag",true);
 				model.addAttribute("files", fileDownloadUris);
 				return new ModelAndView("/view_files", model);

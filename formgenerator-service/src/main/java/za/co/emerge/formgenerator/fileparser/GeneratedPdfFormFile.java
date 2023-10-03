@@ -1,26 +1,28 @@
 package za.co.emerge.formgenerator.fileparser;
 
-
+import java.lang.Comparable;
+import java.time.LocalDateTime;
 /**
  * @author FRANS MEHLAPE (ASEAPO101)
  * 
  * GeneratedPdfFormFile - POJO to return the Generated PDF details required for downloading the file.
  */
-public class GeneratedPdfFormFile 
+public class GeneratedPdfFormFile implements Comparable<Object>
 {
 
 	private String fileName;
 	private String downloadUri;
-	private int fileSize;
+	private int fileId;
 	private String fileType;
+	private LocalDateTime dateTimeCreated;
 	
-	public GeneratedPdfFormFile(String fileName, String downloadUri,int fileSize, String fileType)
+	public GeneratedPdfFormFile(String fileName, String downloadUri,int fileId, String fileType,LocalDateTime dateTimeCreated)
 	{
 		this.fileName = fileName;
 		this.downloadUri = downloadUri;
-		this.fileSize = fileSize;
+		this.fileId = fileId;
 		this.fileType = fileType;
-		
+		this.dateTimeCreated = dateTimeCreated;
 	}
 
 	public String getFileName() {
@@ -39,12 +41,12 @@ public class GeneratedPdfFormFile
 		this.downloadUri = downloadUri;
 	}
 
-	public int getFileSize() {
-		return fileSize;
+	public int getFileId() {
+		return fileId;
 	}
 
-	public void setFileSize(int fileSize) {
-		this.fileSize = fileSize;
+	public void setFileId(int fileId) {
+		this.fileId = fileId;
 	}
 
 	public String getFileType() {
@@ -54,6 +56,25 @@ public class GeneratedPdfFormFile
 	public void setFileType(String fileType) {
 		this.fileType = fileType;
 	}
-	
-	
+
+	public LocalDateTime getDateTimeCreated() {
+		return dateTimeCreated;
+	}
+
+	public void setDateTimeCreated(LocalDateTime dateTimeCreated) {
+		this.dateTimeCreated = dateTimeCreated;
+	}
+
+	@Override
+	public int compareTo(Object o) 
+	{
+		if (this.getClass().cast(o).getDateTimeCreated().equals(this.dateTimeCreated))
+		{
+			return 0;
+		}
+		else
+		{
+			return (this.dateTimeCreated.isAfter(this.getClass().cast(o).getDateTimeCreated()))?-1:1; 
+		}
+	}
 }
