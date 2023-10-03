@@ -1,6 +1,8 @@
 package za.co.emerge.formgenerator.service.impl;
 
 import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +51,8 @@ public class FormGeneratorServiceImpl implements FormGeneratorService
 	{
 		PDFform pdfFormEntiyObject = new PDFform();
 		pdfFormEntiyObject.setDocument(pdfFileByteArray);
-		pdfFormEntiyObject.setDocumentName(new StringBuffer ("clientdetailsform").append(System.currentTimeMillis()).append(".pdf").toString());
+		pdfFormEntiyObject.setDocumentName(new StringBuffer ("Form").append(System.currentTimeMillis()).append(".pdf").toString());
+		pdfFormEntiyObject.setLocalDateTime(LocalDateTime.now());
 		
 		return pdfFormBuilderRepository.saveEntityInstance(pdfFormEntiyObject);
 		

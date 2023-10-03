@@ -1,5 +1,7 @@
 package za.co.emerge.formgenerator.persistence.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,7 +21,7 @@ public class PDFform
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long ID;
+	private Long Id;
 	
 	
 	@Column(name = "document_name")
@@ -28,9 +30,23 @@ public class PDFform
 	@Lob
 	@Column(name = "document")
 	private byte[] document;
+	
+	@Column(name = "date_time_created")
+	private LocalDateTime localDateTime;
+	
+	
+	public LocalDateTime getLocalDateTime() 
+	{
+		return localDateTime;
+	}
+
+	public void setLocalDateTime(LocalDateTime localDateTime) 
+	{
+		this.localDateTime = localDateTime;
+	}
 
 	public Long getId() {
-		return ID;
+		return Id;
 	}
 
 	public byte[] getDocument() {
@@ -48,5 +64,4 @@ public class PDFform
 	public void setDocumentName(String documentName) {
 		this.documentName = documentName;
 	}
-	
 }

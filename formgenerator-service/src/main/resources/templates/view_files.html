@@ -21,7 +21,8 @@
 						<tr>
 							<th align="justify">File Name</th>
 							<th/>
-							<th align="justify">File Download Link</th>
+							<th align="center"> Date Time Created</th>
+							<th align="center">File Download Link</th>
 						</tr>
 					</thead>
 					
@@ -29,6 +30,7 @@
 						<tr th:each="file : ${files}">
 							<td  th:text="${file.fileName}"></td>
 							<td/>
+							<td  th:text="${#strings.toString(file.dateTimeCreated)}"></td>
 							<td align="right"><a  href="view_files.html" th:href="${file.downloadUri}" class="btn btn-primary">download file</a></td>
 						</tr>
 					</tbody>
