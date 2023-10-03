@@ -154,9 +154,10 @@ public class FormGeneratorController
 			
 			return new ModelAndView("/view_files", model);
 		}
-		catch (IOException e) 
+		catch (Exception e) 
 		{
-			throw new FormGeneratorServiceException(e.getMessage(), e);
+			log.error("Exception occurred while performing a PDF file generation request",e);
+			throw new FormGeneratorServiceException(e.getMessage(),e);
 		}
 		//TODO: IMPLEMENT TRY WITH RESOURCE STATEMENT FOR AUTOCLOSEABLE
 		finally
