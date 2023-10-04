@@ -5,7 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.security.cert.CollectionCertStoreParameters;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +33,8 @@ import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceExceptio
 
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * @author FRANS MEHLAPE (ASEAPO101)
@@ -133,7 +134,7 @@ public class FormGeneratorController
 	 * @return ModelAndView - location of the view page and values to render in the browser.
 	 */
 	@GetMapping("/generate")
-	public ModelAndView generatePdfFile(ModelMap model) 
+	public ModelAndView generatePdfFile(ModelMap model, HttpServletRequest servletResponse) 
 	{
 		
 		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("application.properties");
@@ -147,7 +148,7 @@ public class FormGeneratorController
 			
 			log.info("Generating the pdf file from the csv file : "+file.getName());
 			
-			pdfFormBuilder.process(new ReaderInputStream(in));
+			pdfFormBuilder.process(new ReaderInputStream(in), servletResponse.getUserPrincipal());
 			
 			model.addAttribute("showfiles_flag",false);
 			model.addAttribute("message",FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE+file.getName());

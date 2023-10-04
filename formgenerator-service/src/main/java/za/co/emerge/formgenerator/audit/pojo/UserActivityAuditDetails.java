@@ -1,21 +1,26 @@
 package za.co.emerge.formgenerator.audit.pojo;
 
-import java.sql.Timestamp;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+
 
 /**
  * @author @author FRANS MEHLAPE (ASEAPO101)
- *
+ * UserActivityAuditDetails - POJO used to transfer data from the Service and send to Artemis ActiveMQ.
  */
-public class UserActivity 
+//TODO: USE LOMBOK
+public class UserActivityAuditDetails implements Serializable
 {
 
 	private String username;
-	private String csvFileInput;
-	private String pdfFileOutput;
+	private byte [] csvFileInput;
+	private byte [] pdfFileOutput;
 	private String fileDestination;
-	private Timestamp activityTime;
+	private LocalDateTime activityTime;
 	
-	public UserActivity(String username, String csvFileInput, String pdfFileOutput, String fileDestination, Timestamp activityTime) 
+	private static final long serialVersionUID = -3008463479315488279L;
+	
+	public UserActivityAuditDetails(String username, byte [] csvFileInput, byte [] pdfFileOutput, String fileDestination, LocalDateTime activityTime) 
 	{
 	
 		this.username = username;
@@ -33,19 +38,19 @@ public class UserActivity
 		this.username = username;
 	}
 
-	public String getCsvFileInput() {
+	public byte [] getCsvFileInput() {
 		return csvFileInput;
 	}
 
-	public void setCsvFileInput(String csvFileInput) {
+	public void setCsvFileInput(byte [] csvFileInput) {
 		this.csvFileInput = csvFileInput;
 	}
 
-	public String getPdfFileOutput() {
+	public byte [] getPdfFileOutput() {
 		return pdfFileOutput;
 	}
 
-	public void setPdfFileOutput(String pdfFileOutput) {
+	public void setPdfFileOutput(byte [] pdfFileOutput) {
 		this.pdfFileOutput = pdfFileOutput;
 	}
 
@@ -57,11 +62,11 @@ public class UserActivity
 		this.fileDestination = fileDestination;
 	}
 
-	public Timestamp getActivityTime() {
+	public LocalDateTime getActivityTime() {
 		return activityTime;
 	}
 
-	public void setActivityTime(Timestamp activityTime) {
+	public void setActivityTime(LocalDateTime activityTime) {
 		this.activityTime = activityTime;
 	}
 	

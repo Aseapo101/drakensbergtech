@@ -1,14 +1,16 @@
 package za.co.emerge.formgenerator.service.impl;
 
 import java.io.InputStream;
+import java.security.Principal;
 import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import za.co.emerge.formgenerator.audit.UserActivityAuditMessageProducer;
 import za.co.emerge.formgenerator.aws.service.impl.AWSSimpleStorageServiceImpl;
 import za.co.emerge.formgenerator.fileparser.service.FormBuilderService;
 import za.co.emerge.formgenerator.persistence.PDFformBuilderRepository;
@@ -35,14 +37,29 @@ public class FormGeneratorServiceImpl implements FormGeneratorService
 	private AWSSimpleStorageServiceImpl awsS3;
 	
 
+	@Autowired
+	private UserActivityAuditMessageProducer userActivityAuditProducerHandle;
+	
 	@Override
-	public void process(InputStream fileInputStream) throws RuntimeException
+	public void process(InputStream fileInputStream,Principal userPrincipal) throws RuntimeException
 	{
+		
 		byte[] pdfFileByteArray = formBuilderService.buildFile(fileInputStream);
 		this.saveToAmazonWebserviceS3(this.saveToDatabaseFileStore(pdfFileByteArray));
+		log.info("PDF file successfully generated");
+		
+		try
+		{
+			CompletableFuture.runAsync(() -> userActivityAuditProducerHandle.sendActivityAuditMessage(fileInputStream,pdfFileByteArray,userPrincipal)).get();
+		}
+		catch(Exception e)
+		{
+			log.error("Failed to send user activity audit log message",e);
+		}
 		log.info("PDF file successfully generated");	
 	}
 
+	
 	/**
 	 * @parampdfFileByteArray - PDF byte array generated from parsing the CSV file.
 	 * @return PDFform - Database entity of the saved PDF file.

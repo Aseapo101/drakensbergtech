@@ -1,6 +1,6 @@
 package za.co.emerge.formgenerator.audit.service;
 
-import za.co.emerge.formgenerator.audit.pojo.UserActivity;
+import za.co.emerge.formgenerator.audit.pojo.UserActivityAuditDetails;
 
 /**
  * @author @author FRANS MEHLAPE (ASEAPO101)
@@ -9,5 +9,5 @@ import za.co.emerge.formgenerator.audit.pojo.UserActivity;
 public interface FormGeneratorUserActivity 
 {
 
-	boolean auditLogUserActivity(UserActivity userActivity );
+	void persistUserActivityAuditLogMessage(UserActivityAuditDetails userActivity);
 }
