@@ -42,7 +42,7 @@ public class SimpleStorageServiceCredentialsConfig
                 .withCredentials(new AWSStaticCredentialsProvider(this.getCredentials()))
                 .withRegion(Regions.US_EAST_1)
                 .build();
-        log.info("Returnes the AWS S3 credentials successfully.");
+        log.info("Returns the AWS S3 credentials successfully.");
         return s3client;
     }
 }
