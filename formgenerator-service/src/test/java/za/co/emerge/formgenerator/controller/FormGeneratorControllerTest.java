@@ -16,7 +16,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import za.co.emerge.formgenerator.common.FormGeneratorConstants;
 import za.co.emerge.formgenerator.parser.pojo.GeneratedPdfFormFile;
@@ -68,8 +67,7 @@ public class FormGeneratorControllerTest
 	{
 	 
 		this.mvc.perform(get("/generate")).andDo(print())
-				.andExpectAll(status().isOk(),model().attribute("showfiles_flag", false),model().attribute("message", FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE + "test.csv"));
+				.andExpectAll(status().isOk(),model().attribute("showfiles_flag", false),model().attribute("message", FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE + "input_test.csv"));
 		
 	}
-	
 }

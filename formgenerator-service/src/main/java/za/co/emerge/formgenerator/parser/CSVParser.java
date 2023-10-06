@@ -38,9 +38,9 @@ public class CSVParser
 		InputStreamReader inputStreamReader = null;
     	BufferedReader fileReader = null;
     	
-    	Optional.ofNullable(inputStream).orElseThrow();
+    	
     	try {
-	    
+    			Optional.ofNullable(inputStream).orElseThrow();
 	    		inputStreamReader = new InputStreamReader(inputStream);
 	    		fileReader = new BufferedReader(inputStreamReader);
 	    	
@@ -68,7 +68,7 @@ public class CSVParser
 		    	
 	    	return developerTutorialList;
 	    }
-	    catch (IOException e) 
+	    catch (Exception e) 
 	    {
 	      throw new FormGeneratorServiceException("Failed to parse CSV file: " + e.getMessage());
 	    }
