@@ -142,15 +142,15 @@ public class FormGeneratorController
 			Properties properties = new Properties();
 			properties.load(inputStream);
 			
-			File file = new File(properties.getProperty("csv.input.directory"));
-			Reader in = new FileReader(file);
+			File csvFile = new File(properties.getProperty("csv.input.directory"));
+			Reader fileReader = new FileReader(csvFile);
 			
-			log.info("Generating the pdf file from the csv file : "+file.getName());
+			log.info("Generating the pdf file from the csv file : "+csvFile.getName());
 			
-			pdfFormBuilder.process(new ReaderInputStream(in), servletResponse.getUserPrincipal());
+			pdfFormBuilder.process(new ReaderInputStream(fileReader), servletResponse.getUserPrincipal());
 			
 			model.addAttribute("showfiles_flag",false);
-			model.addAttribute("message",FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE+file.getName());
+			model.addAttribute("message",FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE+csvFile.getName());
 			
 			return new ModelAndView("/view_files", model);
 		}

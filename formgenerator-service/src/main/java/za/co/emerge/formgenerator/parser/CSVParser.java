@@ -22,10 +22,10 @@ import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceExceptio
  *
  *CSVFileParser - The class parses a CSV file using Apache commons-csv implementation.
  */
-public class CSVFileParser 
+public class CSVParser 
 
 {
-	private static Logger log = LoggerFactory.getLogger(CSVFileParser.class);
+	private static Logger log = LoggerFactory.getLogger(CSVParser.class);
 	
 	/**
 	 * @paraminputStream - CSV file parameter inputstream.
