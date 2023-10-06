@@ -42,7 +42,7 @@ public class FormGeneratorControllerTest
 	private static PDFform pdfEntity = null;
 	
 	@BeforeAll
-	 public static void setUpBeforeClass() throws Exception 
+	 public static void setUpBeforeClass() 
 	{
 		pdfEntity = new PDFform();
 		
@@ -62,14 +62,12 @@ public class FormGeneratorControllerTest
 				.andExpectAll(status().isOk(),content().bytes(pdfEntity.getDocument()));
 	}
 	
-	
 	@Test
 	public void generatePdfFile() throws Exception 
 	{
 	 
 		this.mvc.perform(get("/generate")).andDo(print())
-				.andExpectAll(status().isOk(),model().attribute("showfiles_flag", false),model().attribute("message", FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE + "test.csv"));
+				.andExpectAll(status().isOk(),model().attribute("showfiles_flag", false),model().attribute("message", FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE + "input_test.csv"));
 		
 	}
-	
 }

@@ -136,21 +136,20 @@ public class FormGeneratorController
 	public ModelAndView generatePdfFile(ModelMap model, HttpServletRequest servletResponse) 
 	{
 		
-		InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("application.properties");
-		try 
+		try(InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("application.properties");) 
 		{
 			Properties properties = new Properties();
 			properties.load(inputStream);
 			
-			File file = new File(properties.getProperty("csv.input.directory"));
-			Reader in = new FileReader(file);
+			File csvFile = new File(properties.getProperty("csv.input.directory"));
+			Reader fileReader = new FileReader(csvFile);
 			
-			log.info("Generating the pdf file from the csv file : "+file.getName());
+			log.info("Generating the pdf file from the csv file : "+csvFile.getName());
 			
-			pdfFormBuilder.process(new ReaderInputStream(in), servletResponse.getUserPrincipal());
+			pdfFormBuilder.process(new ReaderInputStream(fileReader), servletResponse.getUserPrincipal());
 			
 			model.addAttribute("showfiles_flag",false);
-			model.addAttribute("message",FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE+file.getName());
+			model.addAttribute("message",FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE+csvFile.getName());
 			
 			return new ModelAndView("/view_files", model);
 		}
@@ -158,20 +157,6 @@ public class FormGeneratorController
 		{
 			log.error("Exception occurred while performing a PDF file generation request",e);
 			throw new FormGeneratorServiceException(e.getMessage(),e);
-		}
-		//TODO: IMPLEMENT TRY WITH RESOURCE STATEMENT FOR AUTOCLOSEABLE
-		finally
-		{
-			try 
-			{
-				if(inputStream != null)
-					inputStream.close();
-			} 
-			catch (IOException e) 
-			{
-				log.error("Exception while trying to release properties inputstream resource");
-				throw new FormGeneratorServiceException("Exception while trying to release properties inputstream resource",e);
-			}
 		}
 	}
 }

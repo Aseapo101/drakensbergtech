@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.itextpdf.text.Document;
 
 import za.co.emerge.formgenerator.fileparser.service.FormBuilderService;
-import za.co.emerge.formgenerator.parser.CSVFileParser;
+import za.co.emerge.formgenerator.parser.CSVParser;
 import za.co.emerge.formgenerator.parser.PDFParser;
 import za.co.emerge.formgenerator.pojo.IntelligentReportingCustomerDetails;
 import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceException;
@@ -34,10 +34,9 @@ public class FormBuilderServiceImpl implements FormBuilderService
 	@Override
 	public byte [] buildFile(InputStream fileInputStream) throws RuntimeException
 	{
-		Document pdfDocument = null;
 		try
 		{
-			List<IntelligentReportingCustomerDetails> parsedCustomerDetails = CSVFileParser.parseCSVFileInput(fileInputStream);
+			List<IntelligentReportingCustomerDetails> parsedCustomerDetails = CSVParser.parseCSVFileInput(fileInputStream);
 			byte [] pdfByteArrayOutPutStream = PDFParser.createPDF(parsedCustomerDetails);
 			
 			log.info("Successfully generated PDF file type");
@@ -49,10 +48,6 @@ public class FormBuilderServiceImpl implements FormBuilderService
 			log.error("Error while parsing the CSV file and generating PDF file types  : ",e);
 			throw new FormGeneratorServiceException(e.getMessage(), e);
 		}
-		finally
-		{
-			if(pdfDocument != null)
-				pdfDocument.close();
-		}
+		
 	}
 }

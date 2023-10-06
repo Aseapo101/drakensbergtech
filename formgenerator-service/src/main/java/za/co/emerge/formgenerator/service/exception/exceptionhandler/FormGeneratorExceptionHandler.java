@@ -1,9 +1,11 @@
 package za.co.emerge.formgenerator.service.exception.exceptionhandler;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceException;
@@ -17,15 +19,17 @@ import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceExceptio
 public class FormGeneratorExceptionHandler extends ResponseEntityExceptionHandler
 {
 
+	private static Logger log = LoggerFactory.getLogger(FormGeneratorExceptionHandler.class);
 	/**
 	 * handleBankserviceException - Handles system exception that have been wrapped using, FormGeneratorServiceException throwable.
 	 * @paramfgse - System exception wrapper.
-	 * @return ResponseEntity<FormGeneratorServiceExceptionResponse> - sanitized exception response to the user.
+	 * @return ModelAndView - sanitized exception response to the user.
 	 */
 	@ExceptionHandler(FormGeneratorServiceException.class)
-	ResponseEntity<FormGeneratorServiceExceptionResponse> handleBankserviceException(FormGeneratorServiceException fgse)
+	ModelAndView handleBankserviceException(FormGeneratorServiceException fgse,ModelMap modelMap)
 	{
 		
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(new FormGeneratorServiceExceptionResponse(fgse.getMessage(), HttpStatus.ACCEPTED));
+		log.error("System error : "+fgse.getMessage(),fgse);
+		return new ModelAndView("/error", modelMap);
 	}
 }
