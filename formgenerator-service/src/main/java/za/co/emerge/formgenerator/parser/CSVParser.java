@@ -33,66 +33,42 @@ public class CSVParser
 	 * @return List<IntelligentReportingCustomerDetails> - A list of records/lines as per in the CSV file mapped according to
 	 * header columns of the CSV file.
 	 */
-	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream)	{
-		InputStreamReader inputStreamReader = null;
-    	BufferedReader fileReader = null;
-    	
-    	
-    	try {
-    			Optional.ofNullable(inputStream).orElseThrow();
-	    		inputStreamReader = new InputStreamReader(inputStream);
-	    		fileReader = new BufferedReader(inputStreamReader);
-	    	
-	    		List<IntelligentReportingCustomerDetails> developerTutorialList = new ArrayList<>();
+	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream) throws FormGeneratorServiceException
+	{
+		
+		try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream);BufferedReader fileReader = new BufferedReader(inputStreamReader)){
+    			
+			Optional.ofNullable(inputStream).orElseThrow();
 	    		
-	    		CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+			List<IntelligentReportingCustomerDetails> developerTutorialList = new ArrayList<>();
+	    		
+			CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
 		    	        .setHeader(FormGeneratorConstants.CSV_FILE_COLUMN_HEADERS )
 		    	        .setSkipHeaderRecord(true)
 		    	        .build();
 		    	
-		    	Iterable<CSVRecord> csvRecords = csvFormat.parse(fileReader);
+			Iterable<CSVRecord> csvRecords = csvFormat.parse(fileReader);
 		    	
-		    	csvRecords.forEach(csvRecord -> 
-		    	{
-		    		IntelligentReportingCustomerDetails customerDetails = new IntelligentReportingCustomerDetails
-		    				(
-		    				csvRecord.get("Client Name"),
-		    				csvRecord.get("Company Name"),
-		    				csvRecord.get("Number of Active Bank accounts"),
-		    				csvRecord.get("Account Beneficiary")
-		    				);
+			csvRecords.forEach(csvRecord -> 
+			{
+				IntelligentReportingCustomerDetails customerDetails = new IntelligentReportingCustomerDetails
+						(
+								csvRecord.get("Client Name"),
+								csvRecord.get("Company Name"),
+								csvRecord.get("Number of Active Bank accounts"),
+								csvRecord.get("Account Beneficiary")
+								);
 	
-		    	  developerTutorialList.add(customerDetails);
-		    	});
+				developerTutorialList.add(customerDetails);
+			});
 		    	
-	    	return developerTutorialList;
-	    }
-	    catch (Exception e) 
-	    {
-	      throw new FormGeneratorServiceException("Failed to parse CSV file: " + e.getMessage());
-	    }
-	    finally 
-	    {
-	    	closeResource(fileReader,inputStreamReader);
-	    }
-	  }
-	
-	//TODO:Implement Try with resources statement in the above try block
-	private static void closeResource(BufferedReader bufferedReader, InputStreamReader inputStreamreader ) 
-	{
-		try
-		{
-			if(bufferedReader != null) 
-				bufferedReader.close();
-
-			if(inputStreamreader != null) 
-				inputStreamreader.close();
-
-		} 
-		catch (IOException e) 
-		{
-			log.error(" Error while closing system resources in the CSVparser : ",e);
-			throw new FormGeneratorServiceException("Exception occurred while closing system resources when parsing the CSV file");
+			return developerTutorialList;
 		}
+		catch (Exception e) 
+	    {	
+			log.error("Exception while parsing the CSV file",e);
+			throw new FormGeneratorServiceException("Failed to parse CSV file: " + e.getMessage());
+	    }
+	    
 	}
 }

@@ -34,7 +34,6 @@ public class FormBuilderServiceImpl implements FormBuilderService
 	@Override
 	public byte [] buildFile(InputStream fileInputStream) throws RuntimeException
 	{
-		Document pdfDocument = null;
 		try
 		{
 			List<IntelligentReportingCustomerDetails> parsedCustomerDetails = CSVParser.parseCSVFileInput(fileInputStream);
@@ -49,10 +48,6 @@ public class FormBuilderServiceImpl implements FormBuilderService
 			log.error("Error while parsing the CSV file and generating PDF file types  : ",e);
 			throw new FormGeneratorServiceException(e.getMessage(), e);
 		}
-		finally
-		{
-			if(pdfDocument != null)
-				pdfDocument.close();
-		}
+		
 	}
 }
