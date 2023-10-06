@@ -1,4 +1,4 @@
-package za.co.emerge.formgenerator.fileparser.util;
+package za.co.emerge.formgenerator.parser;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
