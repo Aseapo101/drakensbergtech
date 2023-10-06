@@ -42,7 +42,7 @@ public class FormGeneratorControllerTest
 	private static PDFform pdfEntity = null;
 	
 	@BeforeAll
-	 public static void setUpBeforeClass() throws Exception 
+	 public static void setUpBeforeClass() 
 	{
 		pdfEntity = new PDFform();
 		
