@@ -24,7 +24,6 @@ import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceExceptio
 
 class CsvParserTest 
 {
-
 	
 	@Test
 	void testParseCSVFileInput()
