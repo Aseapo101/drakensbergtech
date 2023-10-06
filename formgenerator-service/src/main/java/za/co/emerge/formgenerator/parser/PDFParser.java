@@ -3,6 +3,7 @@ package za.co.emerge.formgenerator.parser;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,8 @@ public class PDFParser
 		ByteArrayOutputStream baos = null;
 		try
 		{
+			Optional.ofNullable(customerDetailsList).orElseThrow();//null check.
+			Optional.ofNullable(customerDetailsList.get(0)).orElseThrow();//list not empty check.
 			Document document = new Document();
 			baos = new ByteArrayOutputStream();
 			PdfWriter.getInstance(document, baos);	
@@ -69,7 +72,7 @@ public class PDFParser
 		catch (Exception e) 
 		{
 			log.error("Exception while generating a PDF file : "+e.getMessage());
-			throw new FormGeneratorServiceException("Exception thrown while closing the baos in the PDFParser class",e);
+			throw new FormGeneratorServiceException("Exception thrown while creating PDF file",e);
 		}
 		finally 
 		{

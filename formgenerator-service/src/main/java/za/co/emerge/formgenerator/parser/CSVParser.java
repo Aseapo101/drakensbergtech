@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
@@ -32,11 +33,12 @@ public class CSVParser
 	 * @return List<IntelligentReportingCustomerDetails> - A list of records/lines as per in the CSV file mapped according to
 	 * header columns of the CSV file.
 	 */
-	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream) 
+	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream) throws  FormGeneratorServiceException
 	{
 		InputStreamReader inputStreamReader = null;
     	BufferedReader fileReader = null;
     	
+    	Optional.ofNullable(inputStream).orElseThrow();
     	try {
 	    
 	    		inputStreamReader = new InputStreamReader(inputStream);
@@ -68,7 +70,7 @@ public class CSVParser
 	    }
 	    catch (IOException e) 
 	    {
-	      throw new RuntimeException("Failed to parse CSV file: " + e.getMessage());
+	      throw new FormGeneratorServiceException("Failed to parse CSV file: " + e.getMessage());
 	    }
 	    finally 
 	    {

@@ -1,10 +1,12 @@
 package za.co.emerge.formgenerator.pojo;
 
+import java.util.Comparator;
+
 /**
  * @author FRANS MEHLAPE (ASEAPO101)
  * IntelligentReportingCustomerDetails - The class maps the columns of the CSV files. Names variables corresponds to the CSV file column headers.
  */
-public class IntelligentReportingCustomerDetails 
+public class IntelligentReportingCustomerDetails implements Comparable<IntelligentReportingCustomerDetails>
 {
 
 	
@@ -52,5 +54,11 @@ public class IntelligentReportingCustomerDetails
 
 	public void setAccBeneficiary(String accBeneficiary) {
 		this.accBeneficiary = accBeneficiary;
+	}
+
+	@Override
+	public int compareTo(IntelligentReportingCustomerDetails objectParam) {
+		// TODO Auto-generated method stub
+		return String.CASE_INSENSITIVE_ORDER.compare(objectParam.getClientName(), this.getClientName());
 	}
 }
