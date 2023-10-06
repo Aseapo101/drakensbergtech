@@ -1,4 +1,4 @@
-package za.co.emerge.formgenerator.parser.test;
+package za.co.emerge.formgenerator.parser;
 
 public class FileParserTest {
 

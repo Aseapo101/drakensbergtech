@@ -1,17 +1,18 @@
 package za.co.emerge.formgenerator.service.impl;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import za.co.emerge.formgenerator.persistence.PDFformBuilderRepository;
 import za.co.emerge.formgenerator.persistence.entity.PDFform;
 import za.co.emerge.formgenerator.service.GeneratePdfFilesService;
+import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceException;
 
 /**
  * @author FRANS MEHLAPE (ASEAPO101)
@@ -30,7 +31,7 @@ public class GeneratePdfFilesServiceImpl implements GeneratePdfFilesService
 	{
 		Set<PDFform> pdfFileIds = new HashSet<PDFform>();
 		
-		pdfFormBuilderRepository.findAll(Sort.by("localDateTime").descending()).stream().forEach(pdfFormEntityObject -> pdfFileIds.add(pdfFormEntityObject));
+		pdfFileIds.addAll(pdfFormBuilderRepository.findAll());
 		log.info("Historical PDF files retrieved from the Database");
 		
 		return pdfFileIds;
@@ -39,7 +40,12 @@ public class GeneratePdfFilesServiceImpl implements GeneratePdfFilesService
 	@Override
 	public PDFform downloadPdfFile(Long Id) throws RuntimeException
 	{
-		log.info("PDF files downloaded from the Database");
+		Optional.ofNullable(Id).orElseThrow(() -> 
+			{ 
+				return new FormGeneratorServiceException("Document download validation, invalid parameter value");
+			});
+		
+		log.info("PDF file downloaded from the Database successfully.");
 		return pdfFormBuilderRepository.findById(Id).get();
 	}
 }

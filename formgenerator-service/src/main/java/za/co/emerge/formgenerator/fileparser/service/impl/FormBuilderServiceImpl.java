@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import com.itextpdf.text.Document;
 
 import za.co.emerge.formgenerator.fileparser.service.FormBuilderService;
-import za.co.emerge.formgenerator.fileparser.util.CSVFileParser;
-import za.co.emerge.formgenerator.fileparser.util.PDFParser;
+import za.co.emerge.formgenerator.parser.CSVFileParser;
+import za.co.emerge.formgenerator.parser.PDFParser;
 import za.co.emerge.formgenerator.pojo.IntelligentReportingCustomerDetails;
 import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceException;
 

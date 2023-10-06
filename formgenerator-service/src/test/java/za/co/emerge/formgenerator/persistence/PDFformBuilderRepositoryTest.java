@@ -9,25 +9,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import za.co.emerge.formgenerator.persistence.PDFformBuilderRepository;
 import za.co.emerge.formgenerator.persistence.entity.PDFform;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace =  AutoConfigureTestDatabase.Replace.AUTO_CONFIGURED)
+@AutoConfigureTestDatabase(replace =  AutoConfigureTestDatabase.Replace.NONE)
 
 public class PDFformBuilderRepositoryTest 
 {
 
 	@Autowired
-	private PDFformBuilderRepository ref;
+	private PDFformBuilderRepository pdfFormBuilderRepositoryHandle;
 	
 	@Test
 	public void test()
 	{
-		
-		try
-		{
-			PDFform pdfEntity = new PDFform();
+		PDFform pdfEntity = new PDFform();
 			
 			pdfEntity.setDocument(new byte [1000]);
 			pdfEntity.setDocumentName("test_document");
@@ -35,17 +31,11 @@ public class PDFformBuilderRepositoryTest
 			LocalDateTime dateTime = LocalDateTime.now();
 			pdfEntity.setLocalDateTime(dateTime);
 			
-			pdfEntity = ref.save(pdfEntity);//persist into the mock DB
-			pdfEntity = ref.findById(pdfEntity.getId()).get(); //retrieved from the Database
+			pdfEntity = pdfFormBuilderRepositoryHandle.save(pdfEntity);//persist into the mock DB
+			pdfEntity = pdfFormBuilderRepositoryHandle.findById(pdfEntity.getId()).get(); //retrieved from the Database
 			
-			assertThat("test_document").isEqualTo(pdfEntity.getLocalDateTime());//same user from the Database.
+			assertThat("test_document").isEqualTo(pdfEntity.getDocumentName());//same user from the Database.
 			assertThat(1000).isEqualTo(pdfEntity.getDocument().length);////same file size froom the Database. 
 			assertThat(dateTime).isEqualTo(pdfEntity.getLocalDateTime());//same time value from Database.
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-		
 	}
 }

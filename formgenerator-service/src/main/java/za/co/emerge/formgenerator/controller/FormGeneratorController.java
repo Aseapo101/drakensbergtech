@@ -18,14 +18,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import za.co.emerge.formgenerator.common.FormGeneratorConstants;
-import za.co.emerge.formgenerator.fileparser.GeneratedPdfFormFile;
+import za.co.emerge.formgenerator.parser.pojo.GeneratedPdfFormFile;
 import za.co.emerge.formgenerator.persistence.entity.PDFform;
 import za.co.emerge.formgenerator.service.FormGeneratorService;
 import za.co.emerge.formgenerator.service.GeneratePdfFilesService;
@@ -44,7 +44,7 @@ import jakarta.servlet.http.HttpServletRequest;
  *generating the given PDF file correspondingly.
  *
  */
-@Controller
+@RestController
 @RequestMapping("/")
 public class FormGeneratorController 
 {
@@ -63,8 +63,8 @@ public class FormGeneratorController
 	 * 
 	 * @return ResponseEntity<byte []> - Byte [] of the document to be viewed.
 	 */
-	@GetMapping(value ="/download/{id}")
-	public ResponseEntity<byte []> ViewGeneratedPdfFiles(@PathVariable("id") String Id) 
+	@GetMapping("/download/{id}")
+	public ResponseEntity<byte []> viewGeneratedPdfFiles(@PathVariable("id") String Id) 
 	{
 		try
 		{
@@ -86,7 +86,6 @@ public class FormGeneratorController
 	 * @param model - Spring UI org.springframework.ui.Model object
 	 * @return ModelAndView - location of the view page and values to render in the browser.
 	 */
-	@SuppressWarnings("unchecked")
 	@GetMapping("/viewfiles")
 	public ModelAndView getGeneratedPdfFileList(ModelMap model) 
 	{

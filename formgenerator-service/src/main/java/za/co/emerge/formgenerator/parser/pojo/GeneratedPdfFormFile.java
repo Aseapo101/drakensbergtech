@@ -1,13 +1,15 @@
-package za.co.emerge.formgenerator.fileparser;
+package za.co.emerge.formgenerator.parser.pojo;
 
 import java.lang.Comparable;
 import java.time.LocalDateTime;
+
+import za.co.emerge.formgenerator.common.FormGeneratorConstants;
 /**
  * @author FRANS MEHLAPE (ASEAPO101)
  * 
  * GeneratedPdfFormFile - POJO to return the Generated PDF details required for downloading the file.
  */
-public class GeneratedPdfFormFile implements Comparable<Object>
+public class GeneratedPdfFormFile implements Comparable<GeneratedPdfFormFile>
 {
 
 	private String fileName;
@@ -66,15 +68,15 @@ public class GeneratedPdfFormFile implements Comparable<Object>
 	}
 
 	@Override
-	public int compareTo(Object o) 
+	public int compareTo(GeneratedPdfFormFile o) 
 	{
-		if (this.getClass().cast(o).getDateTimeCreated().equals(this.dateTimeCreated))
+		if (o.getDateTimeCreated().equals(this.dateTimeCreated))
 		{
-			return 0;
+			return FormGeneratorConstants.ZERO_CONSTANT_VALUE;
 		}
 		else
 		{
-			return (this.dateTimeCreated.isAfter(this.getClass().cast(o).getDateTimeCreated()))?-1:1; 
+			return (this.dateTimeCreated.isAfter(o.getDateTimeCreated()))?FormGeneratorConstants.NEGATIVE_ONE_CONSTANT_VALUE:FormGeneratorConstants.ONE_CONSTANT_VALUE; 
 		}
 	}
 }
