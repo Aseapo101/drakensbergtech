@@ -33,8 +33,7 @@ public class CSVParser
 	 * @return List<IntelligentReportingCustomerDetails> - A list of records/lines as per in the CSV file mapped according to
 	 * header columns of the CSV file.
 	 */
-	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream) throws  FormGeneratorServiceException
-	{
+	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream)	{
 		InputStreamReader inputStreamReader = null;
     	BufferedReader fileReader = null;
     	

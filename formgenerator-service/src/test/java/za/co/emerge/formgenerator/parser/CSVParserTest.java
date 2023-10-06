@@ -27,64 +27,53 @@ class CsvParserTest
 
 	
 	@Test
-	void testParseCSVFileInput() throws IOException
+	void testParseCSVFileInput()
 	{
-		try 
+		TreeSet<IntelligentReportingCustomerDetails> stubTreeSet = new TreeSet<IntelligentReportingCustomerDetails>(List.of(new IntelligentReportingCustomerDetails("clientname","companyname","4","benefiaciary"),new IntelligentReportingCustomerDetails("clientname2","companyname2","2","benefiaciary2")));
+		
+		CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
+		    .setHeader(FormGeneratorConstants.CSV_FILE_COLUMN_HEADERS)
+		    .build();
+		
+		
+		try (FileWriter fileWriter = new FileWriter(new File("src/test/main/resources/unit_test_input.csv"),Charset.forName("utf-8"));CSVPrinter printer = new CSVPrinter(fileWriter, csvFormat)) 
 		{
-			
-			TreeSet<IntelligentReportingCustomerDetails> stubTreeSet = new TreeSet<IntelligentReportingCustomerDetails>(List.of(new IntelligentReportingCustomerDetails("clientname","companyname","4","benefiaciary"),new IntelligentReportingCustomerDetails("clientname2","companyname2","2","benefiaciary2")));
-			
-			CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
-		        .setHeader(FormGeneratorConstants.CSV_FILE_COLUMN_HEADERS)
-		        .build();
-		    
-			FileWriter fileWriter = new FileWriter(new File("src/test/main/resources/unit_test_input.csv"),Charset.forName("utf-8"));
-		    
-		    try (final CSVPrinter printer = new CSVPrinter(fileWriter, csvFormat)) 
+			stubTreeSet.forEach((stubTreeSetElement) -> 
 		    {
-		    	stubTreeSet.forEach((stubTreeSetElement) -> 
+		        try 
 		        {
-		            try 
-		            {
-		                printer.printRecord(stubTreeSetElement.getClientName(),stubTreeSetElement.getCompanyName(),stubTreeSetElement.getNumberOfActiveAcc(),stubTreeSetElement.getAccBeneficiary());
-		            } 
-		            catch (Exception e) 
-		            {
-		                e.printStackTrace();
-		            }
-		        });
-		        
-		        fileWriter.close();
-		        
-		        Reader fileReader = new FileReader("src/test/main/resources/unit_test_input.csv");
-				ReaderInputStream fileReaderInput = new ReaderInputStream(fileReader);
-				
-				TreeSet<IntelligentReportingCustomerDetails> parsedTestFile = new TreeSet<> (CSVParser.parseCSVFileInput(fileReaderInput));
-				
-				//First object same should be same as in the stubbed object due to TreeSet
-				assertTrue(stubTreeSet.first().getClientName().equalsIgnoreCase(parsedTestFile.first().getClientName()));
-				assertTrue(stubTreeSet.first().getCompanyName().equalsIgnoreCase(parsedTestFile.first().getCompanyName()));
-				assertTrue(stubTreeSet.first().getNumberOfActiveAcc().equalsIgnoreCase(parsedTestFile.first().getNumberOfActiveAcc()));
-				assertTrue(stubTreeSet.first().getAccBeneficiary().equalsIgnoreCase(parsedTestFile.first().getAccBeneficiary()));
-				
-				//Last object same should be same as in the stubbed object due to TreeSet
-				assertTrue(stubTreeSet.last().getClientName().equalsIgnoreCase(parsedTestFile.last().getClientName()));
-				assertTrue(stubTreeSet.last().getCompanyName().equalsIgnoreCase(parsedTestFile.last().getCompanyName()));
-				assertTrue(stubTreeSet.last().getNumberOfActiveAcc().equalsIgnoreCase(parsedTestFile.last().getNumberOfActiveAcc()));
-				assertTrue(stubTreeSet.last().getAccBeneficiary().equalsIgnoreCase(parsedTestFile.last().getAccBeneficiary()));
-				
-				
-		    } catch (IOException e1) 
-		    {
-				
-				e1.printStackTrace();
-			}
+		            printer.printRecord(stubTreeSetElement.getClientName(),stubTreeSetElement.getCompanyName(),stubTreeSetElement.getNumberOfActiveAcc(),stubTreeSetElement.getAccBeneficiary());
+		        } 
+		        catch (Exception e) 
+		        {
+		            e.printStackTrace();
+		        }
+		    });
+		    
+		    fileWriter.close();
+		    
+		    Reader fileReader = new FileReader("src/test/main/resources/unit_test_input.csv");
+			ReaderInputStream fileReaderInput = new ReaderInputStream(fileReader);
 			
-		}
-		catch (FileNotFoundException e)
+			TreeSet<IntelligentReportingCustomerDetails> parsedTestFile = new TreeSet<> (CSVParser.parseCSVFileInput(fileReaderInput));
+			
+			//First object same should be same as in the stubbed object due to TreeSet
+			assertTrue(stubTreeSet.first().getClientName().equalsIgnoreCase(parsedTestFile.first().getClientName()));
+			assertTrue(stubTreeSet.first().getCompanyName().equalsIgnoreCase(parsedTestFile.first().getCompanyName()));
+			assertTrue(stubTreeSet.first().getNumberOfActiveAcc().equalsIgnoreCase(parsedTestFile.first().getNumberOfActiveAcc()));
+			assertTrue(stubTreeSet.first().getAccBeneficiary().equalsIgnoreCase(parsedTestFile.first().getAccBeneficiary()));
+			
+			//Last object same should be same as in the stubbed object due to TreeSet
+			assertTrue(stubTreeSet.last().getClientName().equalsIgnoreCase(parsedTestFile.last().getClientName()));
+			assertTrue(stubTreeSet.last().getCompanyName().equalsIgnoreCase(parsedTestFile.last().getCompanyName()));
+			assertTrue(stubTreeSet.last().getNumberOfActiveAcc().equalsIgnoreCase(parsedTestFile.last().getNumberOfActiveAcc()));
+			assertTrue(stubTreeSet.last().getAccBeneficiary().equalsIgnoreCase(parsedTestFile.last().getAccBeneficiary()));
+			
+			
+		} 
+		catch (IOException e1) 
 		{
-			
-			e.printStackTrace();
+			e1.printStackTrace();
 		}
 		
 		//method input validation test
