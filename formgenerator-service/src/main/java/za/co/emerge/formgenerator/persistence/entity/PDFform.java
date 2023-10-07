@@ -18,7 +18,7 @@ import jakarta.persistence.Table;
  */
 @Entity
 @Table(name = "pdf_form")
-public class PDFform 
+public class PDFform
 {
 
 	@Id
@@ -65,5 +65,15 @@ public class PDFform
 
 	public void setDocumentName(String documentName) {
 		this.documentName = documentName;
+	}
+	
+	/**	Retrieving using Set 
+		due its Big O notation 
+		performance complexity.
+	*/
+	@Override
+	public boolean equals(Object obj)
+	{
+		return this.getId().equals(((PDFform)obj).getId());
 	}
 }

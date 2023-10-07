@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -113,7 +114,8 @@ public class FormGeneratorController
 						
 			    	}).collect(Collectors.toList());
 				
-				Collections.sort(fileDownloadUris);
+				fileDownloadUris.sort(new GeneratedPdfFormFile());
+				
 				model.addAttribute("showfiles_flag",true);
 				model.addAttribute("files", fileDownloadUris);
 				return new ModelAndView("/view_files", model);

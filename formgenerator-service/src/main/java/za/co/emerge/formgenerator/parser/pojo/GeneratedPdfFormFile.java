@@ -1,7 +1,7 @@
 package za.co.emerge.formgenerator.parser.pojo;
 
-import java.lang.Comparable;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 
 import za.co.emerge.formgenerator.common.FormGeneratorConstants;
 /**
@@ -9,7 +9,7 @@ import za.co.emerge.formgenerator.common.FormGeneratorConstants;
  * 
  * GeneratedPdfFormFile - POJO to return the Generated PDF details required for downloading the file.
  */
-public class GeneratedPdfFormFile implements Comparable<GeneratedPdfFormFile>
+public class GeneratedPdfFormFile implements Comparator<GeneratedPdfFormFile>
 {
 
 	private String fileName;
@@ -17,6 +17,8 @@ public class GeneratedPdfFormFile implements Comparable<GeneratedPdfFormFile>
 	private int fileId;
 	private String fileType;
 	private LocalDateTime dateTimeCreated;
+	
+	public GeneratedPdfFormFile() {}
 	
 	public GeneratedPdfFormFile(String fileName, String downloadUri,int fileId, String fileType,LocalDateTime dateTimeCreated)
 	{
@@ -66,17 +68,11 @@ public class GeneratedPdfFormFile implements Comparable<GeneratedPdfFormFile>
 	public void setDateTimeCreated(LocalDateTime dateTimeCreated) {
 		this.dateTimeCreated = dateTimeCreated;
 	}
-
+	
 	@Override
-	public int compareTo(GeneratedPdfFormFile o) 
+	public int compare(GeneratedPdfFormFile param_1, GeneratedPdfFormFile param_2) 
 	{
-		if (o.getDateTimeCreated().equals(this.dateTimeCreated))
-		{
-			return FormGeneratorConstants.ZERO_CONSTANT_VALUE;
-		}
-		else
-		{
-			return (this.dateTimeCreated.isAfter(o.getDateTimeCreated()))?FormGeneratorConstants.NEGATIVE_ONE_CONSTANT_VALUE:FormGeneratorConstants.ONE_CONSTANT_VALUE; 
-		}
+		return (param_2.getDateTimeCreated().isBefore(param_1.getDateTimeCreated()))?FormGeneratorConstants.NEGATIVE_ONE_CONSTANT_VALUE:FormGeneratorConstants.ONE_CONSTANT_VALUE;
+		
 	}
 }

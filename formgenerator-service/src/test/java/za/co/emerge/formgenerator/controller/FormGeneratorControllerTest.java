@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.BDDMockito.given;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 import za.co.emerge.formgenerator.common.FormGeneratorConstants;
 import za.co.emerge.formgenerator.parser.pojo.GeneratedPdfFormFile;
@@ -63,11 +65,28 @@ public class FormGeneratorControllerTest
 	}
 	
 	@Test
+	public void getGeneratedPdfFileList() throws Exception 
+	{
+	
+		Set<PDFform> formSet = new HashSet<>(1);
+		
+		given(pdfFileViewService.getHistoricalPdfFiles()).willReturn(formSet);
+		
+		this.mvc.perform(get("/viewfiles")).andDo(print())
+				.andExpectAll(status().isOk(),
+				model().attribute("showfiles_flag",true),
+				model().attributeExists("files"));
+	}
+	
+	@Test
 	public void generatePdfFile() throws Exception 
 	{
 	 
 		this.mvc.perform(get("/generate")).andDo(print())
-				.andExpectAll(status().isOk(),model().attribute("showfiles_flag", false),model().attribute("message", FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE + "input_test.csv"));
+				.andExpectAll(status().
+						isOk(),
+						model().attribute("showfiles_flag", false),
+						model().attribute("message", FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE + "input_test.csv"));
 		
 	}
 }
