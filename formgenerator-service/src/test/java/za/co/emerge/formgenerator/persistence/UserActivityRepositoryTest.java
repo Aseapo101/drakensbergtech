@@ -30,7 +30,7 @@ public class UserActivityRepositoryTest
 			userActivityEntity.setPdfOutputFile(new byte [100]);
 			
 			LocalDateTime  dateTime = LocalDateTime.now();
-			userActivityEntity.setCreationDate(LocalDateTime.now());
+			userActivityEntity.setCreationDate(dateTime);
 			
 			userActivityEntity =  userActivityRepositoryHandle.save(userActivityEntity); //persist.
 			userActivityEntity = userActivityRepositoryHandle.findById(userActivityEntity.getId()).get(); //retrieve from the Mock Database.

@@ -2,12 +2,12 @@ package za.co.emerge.formgenerator.fileparser.service.impl;
 
 import java.io.InputStream;
 import java.util.List;
+import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.itextpdf.text.Document;
 
 import za.co.emerge.formgenerator.fileparser.service.FormBuilderService;
 import za.co.emerge.formgenerator.parser.CSVParser;
@@ -25,6 +25,12 @@ import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceExceptio
 public class FormBuilderServiceImpl implements FormBuilderService
 {
 
+	@Autowired
+	private PDFParser pdfParser;
+	
+	@Autowired
+	private CSVParser csvParser;
+	
 	private static Logger log = LoggerFactory.getLogger(FormBuilderServiceImpl.class);
 	
 	/**
@@ -32,12 +38,17 @@ public class FormBuilderServiceImpl implements FormBuilderService
 	 *@paramfileInputStream - CSV file Inputstream used to generate the corresponding PDF file.
 	 */
 	@Override
-	public byte [] buildFile(InputStream fileInputStream) throws RuntimeException
+	public byte [] buildFile(InputStream fileInputStream) throws FormGeneratorServiceException
 	{
+		
+		Optional.ofNullable(fileInputStream).orElseThrow(() -> 
+		{
+			throw new FormGeneratorServiceException("Invalid file input stream passed to the FormBuilderService");
+		});
 		try
 		{
-			List<IntelligentReportingCustomerDetails> parsedCustomerDetails = CSVParser.parseCSVFileInput(fileInputStream);
-			byte [] pdfByteArrayOutPutStream = PDFParser.createPDF(parsedCustomerDetails);
+			List<IntelligentReportingCustomerDetails> parsedCustomerDetails = csvParser.parseCSVFileInput(fileInputStream);
+			byte [] pdfByteArrayOutPutStream = pdfParser.createPDF(parsedCustomerDetails);
 			
 			log.info("Successfully generated PDF file type");
 			

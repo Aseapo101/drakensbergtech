@@ -5,8 +5,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -137,18 +135,25 @@ public class FormGeneratorController
 	@GetMapping("/generate")
 	public ModelAndView generatePdfFile(ModelMap model, HttpServletRequest servletResponse) 
 	{
-		
-		try(InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("application.properties");) 
+		File csvFile = null;
+		try(InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("application.properties");)
 		{
 			Properties properties = new Properties();
 			properties.load(inputStream);
 			
-			File csvFile = new File(properties.getProperty("csv.input.directory"));
-			Reader fileReader = new FileReader(csvFile);
-			
+			csvFile = new File(properties.getProperty("csv.input.directory"));
 			log.info("Generating the pdf file from the csv file : "+csvFile.getName());
-			
-			pdfFormBuilder.process(new ReaderInputStream(fileReader), servletResponse.getUserPrincipal());
+		
+		}
+		catch(IOException e)
+		{
+			throw new FormGeneratorServiceException("Exception loading system properties file");
+		}
+		
+		try(Reader fileReader = new FileReader(csvFile);
+				ReaderInputStream fileReaderInputStream = new ReaderInputStream(fileReader)) 
+		{
+			pdfFormBuilder.process(fileReaderInputStream, servletResponse.getUserPrincipal());
 			
 			model.addAttribute("showfiles_flag",false);
 			model.addAttribute("message",FormGeneratorConstants.PDF_FILE_GENERATED_MESSAGE+csvFile.getName());
