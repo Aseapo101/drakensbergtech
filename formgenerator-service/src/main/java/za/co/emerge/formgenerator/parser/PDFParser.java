@@ -1,12 +1,12 @@
 package za.co.emerge.formgenerator.parser;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import com.itextpdf.text.BaseColor;
 
@@ -27,19 +27,27 @@ import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceExceptio
  *
  *PDFParser - The class creates a PDF file using PDF iText API implementation.
  */
+@Component
 public class PDFParser 
 {
 
-	public static byte[] createPDF(List <IntelligentReportingCustomerDetails> customerDetailsList) 
+	public byte[] createPDF(List <IntelligentReportingCustomerDetails> customerDetailsList) throws FormGeneratorServiceException
 	{
 		Logger log = LoggerFactory.getLogger(PDFParser.class);
-		ByteArrayOutputStream baos = null;
-		try
+		
+		Optional.ofNullable(customerDetailsList).orElseThrow(() ->{
+			throw new FormGeneratorServiceException ("Customer reporting details are null");
+		});//null check.
+		
+		Optional.ofNullable(customerDetailsList.get(0)).orElseThrow(() -> {
+			
+			throw new FormGeneratorServiceException ("Customer report details are empty.");
+		});//list not empty check.
+		
+		try(ByteArrayOutputStream baos = new ByteArrayOutputStream())
 		{
-			Optional.ofNullable(customerDetailsList).orElseThrow();//null check.
-			Optional.ofNullable(customerDetailsList.get(0)).orElseThrow();//list not empty check.
+			
 			Document document = new Document();
-			baos = new ByteArrayOutputStream();
 			PdfWriter.getInstance(document, baos);	
 			
 			document.open();
@@ -66,27 +74,14 @@ public class PDFParser
 				
 			document.add(pdfTable);
 			document.close();
+			return baos.toByteArray();
 			
 		}
 		//TODO: Implement try with resources statement for AutoCloseable
 		catch (Exception e) 
 		{
 			log.error("Exception while generating a PDF file : "+e.getMessage());
-			throw new FormGeneratorServiceException("Exception thrown while creating PDF file",e);
+			throw new FormGeneratorServiceException("Exception while generating a PDF file",e);
 		}
-		finally 
-		{
-			try {
-					if(baos !=null)
-					baos.close();
-				}
-					catch (IOException e) 
-				{
-						log.error("Exception thrown while closing the baos system resource : "+e.getMessage());
-						throw new FormGeneratorServiceException("Exception thrown while closing the baos system resource : ",e);
-				}
-		}
-		
-		return baos.toByteArray();
 	}
 }

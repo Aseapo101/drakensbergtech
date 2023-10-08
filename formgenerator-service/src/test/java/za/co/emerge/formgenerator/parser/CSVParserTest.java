@@ -3,7 +3,6 @@ package za.co.emerge.formgenerator.parser;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,13 +16,19 @@ import org.apache.commons.csv.CSVPrinter;
 import org.assertj.core.api.Assertions;
 import org.hibernate.engine.jdbc.ReaderInputStream;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import za.co.emerge.formgenerator.common.FormGeneratorConstants;
 import za.co.emerge.formgenerator.pojo.IntelligentReportingCustomerDetails;
 import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceException;
 
+@ExtendWith(MockitoExtension.class)
 class CsvParserTest 
 {
+	@InjectMocks
+	private CSVParser csvParser;
 	
 	@Test
 	void testParseCSVFileInput()
@@ -54,7 +59,7 @@ class CsvParserTest
 		    Reader fileReader = new FileReader("src/test/main/resources/unit_test_input.csv");
 			ReaderInputStream fileReaderInput = new ReaderInputStream(fileReader);
 			
-			TreeSet<IntelligentReportingCustomerDetails> parsedTestFile = new TreeSet<> (CSVParser.parseCSVFileInput(fileReaderInput));
+			TreeSet<IntelligentReportingCustomerDetails> parsedTestFile = new TreeSet<> (csvParser.parseCSVFileInput(fileReaderInput));
 			
 			//First object same should be same as in the stubbed object due to TreeSet
 			assertTrue(stubTreeSet.first().getClientName().equalsIgnoreCase(parsedTestFile.first().getClientName()));
@@ -67,17 +72,14 @@ class CsvParserTest
 			assertTrue(stubTreeSet.last().getCompanyName().equalsIgnoreCase(parsedTestFile.last().getCompanyName()));
 			assertTrue(stubTreeSet.last().getNumberOfActiveAcc().equalsIgnoreCase(parsedTestFile.last().getNumberOfActiveAcc()));
 			assertTrue(stubTreeSet.last().getAccBeneficiary().equalsIgnoreCase(parsedTestFile.last().getAccBeneficiary()));
-			
-			
 		} 
-		catch (IOException e1) 
+		catch (IOException e) 
 		{
-			e1.printStackTrace();
+			e.printStackTrace();
 		}
 		
-		//method input validation test
-			Assertions.assertThatExceptionOfType(FormGeneratorServiceException.class)
-				.isThrownBy(() -> CSVParser.parseCSVFileInput(null));
+		//method input validation test and exception.
+		Assertions.assertThatExceptionOfType(FormGeneratorServiceException.class)
+			.isThrownBy(() -> csvParser.parseCSVFileInput(null)).withMessage("Invalid input stream passed to the CSV parser.");
 	}
-
 }

@@ -2,7 +2,6 @@ package za.co.emerge.formgenerator.parser;
 
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -13,6 +12,7 @@ import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import za.co.emerge.formgenerator.common.FormGeneratorConstants;
 import za.co.emerge.formgenerator.pojo.IntelligentReportingCustomerDetails;
@@ -23,6 +23,8 @@ import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceExceptio
  *
  *CSVFileParser - The class parses a CSV file using Apache commons-csv implementation.
  */
+
+@Component
 public class CSVParser 
 
 {
@@ -33,13 +35,16 @@ public class CSVParser
 	 * @return List<IntelligentReportingCustomerDetails> - A list of records/lines as per in the CSV file mapped according to
 	 * header columns of the CSV file.
 	 */
-	public static List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream) throws FormGeneratorServiceException
+	public List<IntelligentReportingCustomerDetails> parseCSVFileInput(InputStream inputStream) throws FormGeneratorServiceException
 	{
 		
+		Optional.ofNullable(inputStream).orElseThrow( () -> 
+		{
+			throw new FormGeneratorServiceException("Invalid input stream passed to the CSV parser.");
+		});
+    		
 		try (InputStreamReader inputStreamReader = new InputStreamReader(inputStream);BufferedReader fileReader = new BufferedReader(inputStreamReader)){
     			
-			Optional.ofNullable(inputStream).orElseThrow();
-	    		
 			List<IntelligentReportingCustomerDetails> developerTutorialList = new ArrayList<>();
 	    		
 			CSVFormat csvFormat = CSVFormat.DEFAULT.builder()
