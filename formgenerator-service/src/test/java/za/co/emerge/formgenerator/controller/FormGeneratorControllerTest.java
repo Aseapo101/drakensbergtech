@@ -20,7 +20,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import za.co.emerge.formgenerator.common.FormGeneratorConstants;
-import za.co.emerge.formgenerator.parser.pojo.GeneratedPdfFormFile;
 import za.co.emerge.formgenerator.persistence.entity.PDFform;
 import za.co.emerge.formgenerator.service.FormGeneratorService;
 import za.co.emerge.formgenerator.service.GeneratePdfFilesService;
@@ -32,9 +31,6 @@ public class FormGeneratorControllerTest
 	@MockBean
 	private FormGeneratorService pdfFormBuilder;
 
-	@MockBean
-	private GeneratedPdfFormFile f;
-	
 	@MockBean
 	private GeneratePdfFilesService pdfFileViewService;
 	

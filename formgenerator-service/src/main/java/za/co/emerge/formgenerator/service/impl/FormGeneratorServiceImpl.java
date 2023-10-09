@@ -3,6 +3,7 @@ package za.co.emerge.formgenerator.service.impl;
 import java.io.InputStream;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import za.co.emerge.formgenerator.fileparser.service.FormBuilderService;
 import za.co.emerge.formgenerator.persistence.PDFformBuilderRepository;
 import za.co.emerge.formgenerator.persistence.entity.PDFform;
 import za.co.emerge.formgenerator.service.FormGeneratorService;
+import za.co.emerge.formgenerator.service.exception.FormGeneratorServiceException;
 
 /**
  * @author FRANS MEHLAPE (ASEAPO101)
@@ -44,19 +46,31 @@ public class FormGeneratorServiceImpl implements FormGeneratorService
 	public void process(InputStream fileInputStream,Principal userPrincipal) throws RuntimeException
 	{
 		
-		byte[] pdfFileByteArray = formBuilderService.buildFile(fileInputStream);
-		this.saveToAmazonWebserviceS3(this.saveToDatabaseFileStore(pdfFileByteArray));
-		log.info("PDF file successfully generated");
+		Optional.ofNullable(fileInputStream).orElseThrow(() -> 
+			{throw new FormGeneratorServiceException("System cannot process a null File input.");});
 		
 		try
 		{
-			CompletableFuture.runAsync(() -> userActivityAuditProducerHandle.sendActivityAuditMessage(fileInputStream,pdfFileByteArray,userPrincipal)).get();
+			byte[] pdfFileByteArray = formBuilderService.buildFile(fileInputStream);
+			this.saveToAmazonWebserviceS3(this.saveToDatabaseFileStore(pdfFileByteArray));
+			
+			log.info("PDF file successfully generated");
+			
+			//ensuring there is a demarcation between audit log and Business requirement processing.
+			try
+			{
+				CompletableFuture.runAsync(() -> userActivityAuditProducerHandle.sendActivityAuditMessage(fileInputStream,pdfFileByteArray,userPrincipal)).get();
+			}
+			catch(Exception e)
+			{
+				log.error("Failed to send user activity audit log message",e);
+			}
 		}
 		catch(Exception e)
 		{
-			log.error("Failed to send user activity audit log message",e);
+			e.printStackTrace();
+			//throw new FormGeneratorServiceException(e.getMessage());
 		}
-		log.info("PDF file successfully generated");	
 	}
 
 	

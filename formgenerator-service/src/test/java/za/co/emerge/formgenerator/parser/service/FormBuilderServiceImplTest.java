@@ -47,7 +47,6 @@ class FormBuilderServiceImplTest {
 		customerReportingList.add(new IntelligentReportingCustomerDetails("clientname","companyname","4","benefiaciary"));
 	}
 	
-	//TODO: catch exceptions
 	@Test
 	public void testBuildFile() throws FileNotFoundException
 	{
@@ -56,9 +55,6 @@ class FormBuilderServiceImplTest {
 				FileOutputStream fileOutputStream = new FileOutputStream("src/test/main/resources/unit_test_output2.pdf");
 				FileInputStream referencedPdf = new FileInputStream (new File ("src/test/main/resources/unit_test_output.pdf")))
 		{
-			
-			//List<IntelligentReportingCustomerDetails> parsedCustomeDetails = csvParser.parseCSVFileInput(csvFileInputStream);
-			//byte [] pdfByteArrayOutPutStream = PDFParser.createPDF(parsedCustomerDetails);
 			
 			org.mockito.BDDMockito.given(csvParser.parseCSVFileInput(csvFileInputStream)).willReturn(customerReportingList);
 			org.mockito.BDDMockito.given(pdfParser.createPDF(customerReportingList)).willReturn(referencedPdf.readAllBytes());

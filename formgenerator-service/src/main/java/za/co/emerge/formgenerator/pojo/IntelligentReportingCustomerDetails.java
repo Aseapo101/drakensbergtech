@@ -1,7 +1,5 @@
 package za.co.emerge.formgenerator.pojo;
 
-import java.util.Comparator;
-
 /**
  * @author FRANS MEHLAPE (ASEAPO101)
  * IntelligentReportingCustomerDetails - The class maps the columns of the CSV files. Names variables corresponds to the CSV file column headers.

@@ -13,6 +13,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 
+import za.co.emerge.formgenerator.aws.service.AWSSimpleStorageService;
 import za.co.emerge.formgenerator.aws.utils.SimpleStorageServicePropertiesConfiguration;
 
 /**
@@ -36,13 +37,13 @@ public class SimpleStorageServiceCredentialsConfig
 	
 	//Set Amazon AWS Credentials.
 	@Bean
-    protected AmazonS3 getSimpleStorageServiceClient() {
+    public AmazonS3 getSimpleStorageServiceClient(AWSSimpleStorageService service) {
         AmazonS3 s3client = AmazonS3ClientBuilder
                 .standard()
                 .withCredentials(new AWSStaticCredentialsProvider(this.getCredentials()))
                 .withRegion(Regions.US_EAST_1)
                 .build();
-        log.info("Returns the AWS S3 credentials successfully.");
+        log.info("Returned the AWS S3 client handle successfully.");
         return s3client;
     }
 }

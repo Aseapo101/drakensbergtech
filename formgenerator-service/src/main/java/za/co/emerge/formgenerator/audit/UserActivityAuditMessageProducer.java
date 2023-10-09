@@ -36,6 +36,9 @@ public class UserActivityAuditMessageProducer
 	{
 		try
 		{
+			log.info(" Producer received the user activity audit log message");
+			
+			
 			String userName = Optional.ofNullable(userPrincipal).orElse(new BasicUserPrincipal("default_user")).getName();
 			this.sendMessage (new UserActivityAuditDetails(userName, fileInputStream.readAllBytes() ,pdfFileOutput,"default_destination",LocalDateTime.now()));
 		}
