@@ -69,6 +69,5 @@ public class UserActivityAuditDetails implements Serializable
 	public void setActivityTime(LocalDateTime activityTime) {
 		this.activityTime = activityTime;
 	}
-	
-	
+
 }

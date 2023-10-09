@@ -25,8 +25,6 @@ public class FormGeneratorUserActivityAuditor implements FormGeneratorUserActivi
 	@Override
 	public void persistUserActivityAuditLogMessage(UserActivityAuditDetails userActivity) 
 	{
-		
-		//TODO: INPUT VALIDATION..
 		try
 		{
 			log.info(" Persisting the user activity audit log message");
