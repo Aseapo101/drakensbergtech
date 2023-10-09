@@ -85,7 +85,5 @@ public class UserActivity
 	public void setFileDestination(String fileDestination) {
 		this.fileDestination = fileDestination;
 	}
-	
-	
-	
+
 }

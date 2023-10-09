@@ -29,7 +29,7 @@ public class UserActivityAuditMessageProducer
 	@Autowired
 	private JmsTemplate jmsTemplateHanle;
 	
-	@Value("${jms.queue.destination")
+	@Value("${jms.queue.destination}")
 	private String destinationQueueName;
 	
 	public void sendActivityAuditMessage(InputStream fileInputStream, byte [] pdfFileOutput,Principal userPrincipal) 
