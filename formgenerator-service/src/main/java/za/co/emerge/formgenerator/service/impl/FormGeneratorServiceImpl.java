@@ -68,8 +68,7 @@ public class FormGeneratorServiceImpl implements FormGeneratorService
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-			//throw new FormGeneratorServiceException(e.getMessage());
+			throw new FormGeneratorServiceException(e.getMessage());
 		}
 	}
 
