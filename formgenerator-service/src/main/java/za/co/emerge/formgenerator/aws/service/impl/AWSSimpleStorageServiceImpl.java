@@ -1,6 +1,8 @@
 package za.co.emerge.formgenerator.aws.service.impl;
 
 import java.io.ByteArrayInputStream;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,30 +29,40 @@ public class AWSSimpleStorageServiceImpl implements AWSSimpleStorageService
 	private Logger log = LoggerFactory.getLogger(AWSSimpleStorageServiceImpl.class);
 	
 	@Autowired
-	SimpleStorageServiceCredentialsConfig awsS3Credentials;
+	private SimpleStorageServiceCredentialsConfig awsS3Credentials;
 	
 	@Autowired
-	SimpleStorageServiceBucketManager awsS3bucketmanager;
+	private SimpleStorageServiceBucketManager awsS3bucketmanager;
 	
 	@Override
 	public void awsS3PdfFileUpload(PDFform pdfFormEntiyObject) throws RuntimeException
 	{
+		Optional.ofNullable(pdfFormEntiyObject).orElseThrow(() ->{
+				throw new FormGeneratorServiceException ("Form data to upload to AWS S3 is null");}); 
+		
+		Optional.ofNullable(pdfFormEntiyObject.getDocument()).orElseThrow(() ->{
+			throw new FormGeneratorServiceException ("Form data to upload to AWS S3 has no content");});
+		
 		try
 		{
-			Long startTimingExecution = PerfomanceLoggerSubject.startAWSTimeLog();
-			AmazonS3 awsClient = awsS3Credentials.getSimpleStorageServiceClient();
-			ByteArrayInputStream pdfArrayByteOutputStream = new ByteArrayInputStream(pdfFormEntiyObject.getDocument());
+			CompletableFuture<Long> executionTimeStart = CompletableFuture.supplyAsync(() -> 
+			{
+				return PerfomanceLoggerSubject.startAWSTimeLog();
+			});
+			
+			AmazonS3 awsClient = awsS3Credentials.getSimpleStorageServiceClient(this);
+			ByteArrayInputStream pdfByteArrayInputStream = new ByteArrayInputStream(pdfFormEntiyObject.getDocument());
 			
 			//Set file Metadata on S3 Bucket
 			ObjectMetadata metaDataObject = new ObjectMetadata();
-			metaDataObject.setContentLength(pdfArrayByteOutputStream.available());
+			metaDataObject.setContentLength(pdfByteArrayInputStream.available());
 			metaDataObject.setContentType("application/pdf");
 			
-			awsClient.putObject(awsS3bucketmanager.getBucket(awsClient), pdfFormEntiyObject.getDocumentName() , pdfArrayByteOutputStream , metaDataObject);
+			awsClient.putObject(awsS3bucketmanager.getBucket(awsClient), pdfFormEntiyObject.getDocumentName() , pdfByteArrayInputStream , metaDataObject);
 			
-			PerfomanceLoggerSubject.endAWSTimeLog(startTimingExecution);
+			executionTimeStart.thenAccept( startLogTime -> {PerfomanceLoggerSubject.endAWSTimeLog(startLogTime);});
 			
-			log.info(" Successfully uploaded PDF to AWS S3 storage");
+			log.info(" Successfully uploaded PDF file to AWS S3 storage");
 		}
 		catch(Exception e)
 		{

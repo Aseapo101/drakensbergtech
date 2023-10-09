@@ -35,7 +35,7 @@ public class PDFformBuilderRepositoryTest
 			pdfEntity = pdfFormBuilderRepositoryHandle.findById(pdfEntity.getId()).get(); //retrieved from the Database
 			
 			assertThat("test_document").isEqualTo(pdfEntity.getDocumentName());//same user from the Database.
-			assertThat(1000).isEqualTo(pdfEntity.getDocument().length);////same file size froom the Database. 
+			assertThat(1000).isEqualTo(pdfEntity.getDocument().length);////same file size from the Database. 
 			assertThat(dateTime).isEqualTo(pdfEntity.getLocalDateTime());//same time value from Database.
 	}
 }

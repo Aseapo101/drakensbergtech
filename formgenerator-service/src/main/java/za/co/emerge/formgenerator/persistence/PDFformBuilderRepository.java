@@ -1,5 +1,7 @@
 package za.co.emerge.formgenerator.persistence;
 
+import java.util.concurrent.CompletableFuture;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,10 +20,14 @@ public interface PDFformBuilderRepository extends JpaRepository<PDFform, Long>
 	public default PDFform saveEntityInstance(PDFform pdfEntiy)
 	{
 
-		Long startTimingExecution = PerfomanceLoggerSubject.startPostgresDatabaseTimeLog();
-		pdfEntiy = this.save(pdfEntiy);
-		PerfomanceLoggerSubject.endPostgresDatabaseTimeLog(startTimingExecution);
+		CompletableFuture<Long> executionTimeStart = CompletableFuture.supplyAsync(() -> 
+		{
+			return PerfomanceLoggerSubject.startPostgresDatabaseTimeLog();
+		});
 		
+		pdfEntiy = this.save(pdfEntiy);
+		
+		executionTimeStart.thenAccept( startLogTime -> {PerfomanceLoggerSubject.endPostgresDatabaseTimeLog(startLogTime);});
 		return pdfEntiy;
 	}
 }

@@ -3,6 +3,8 @@ package za.co.emerge.formgenerator.performancematrix;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import za.co.emerge.formgenerator.common.FormGeneratorConstants;
+
 /**
  *@author FRANS MEHLAPE (ASEAPO101)
  *PostgresPerfomanceMatrixLogger - Class logs to console the time taken in milliseconds by
@@ -11,8 +13,6 @@ import org.slf4j.LoggerFactory;
 public class PostgresPerfomanceMatrixLogger implements PerfomanceMatrix
 {
 	private static Logger log = LoggerFactory.getLogger(PostgresPerfomanceMatrixLogger.class);
-	
-	private static final String DATA_STORE_NAME = "Postgres-DatabaseStore";
 	
 	@Override
 	public Long logStartTimeMatric() 
@@ -23,7 +23,7 @@ public class PostgresPerfomanceMatrixLogger implements PerfomanceMatrix
 	@Override
 	public void logEndTimeMatric(Long startTimingExecution)
 	{
-		log.info("TIME TAKEN TO UPLOAD THE PDF FILE BY, "+DATA_STORE_NAME+" IN MILLISECONDS, "+Math.subtractExact(System.currentTimeMillis(),startTimingExecution));
+		log.info(new StringBuffer(FormGeneratorConstants.TIME_MATRIX_SENTENCE).append(FormGeneratorConstants.POSTGRES_DATA_STORE_NAME).append(FormGeneratorConstants.MILLISECONDS).append(Math.subtractExact(System.currentTimeMillis(),startTimingExecution)).toString());
 	}
 
 }
