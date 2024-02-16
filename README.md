@@ -1,4 +1,4 @@
-The repository is an illustration of conversion of a file from CSV to PDF.
+The repository is an illustration of conversion of a CSV to PDF and create a secondary storage for it on AWS cloud.
 
 Technologies implemented:
 
